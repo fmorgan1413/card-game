@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
 {
-    public GameManager GM;
     public DealCards cards;
     // Start is called before the first frame update
     void Start()
@@ -20,17 +19,15 @@ public class EnemyControl : MonoBehaviour
 
     public void AI() 
     {
-        if (GM.enemyHealth < 5)
+        if (GameManager.GM.enemyHealth < 5)
         {
             DefensiveMode();
+            cards.OnClick();
         }
-        else if (GM.enemyHealth <= 10 & GM.enemyHealth >= 5)
+        else if (GameManager.GM.enemyHealth < 10 & GameManager.GM.enemyHealth >= 5)
         {
-            MixedMode();
-        }
-        else 
-        {
-            OffensiveMode();
+            SafeMode();
+            cards.OnClick();
         }
     }
 
@@ -39,12 +36,7 @@ public class EnemyControl : MonoBehaviour
 
     }
 
-    public void MixedMode()
-    {
-
-    }
-
-    public void OffensiveMode()
+    public void SafeMode()
     {
 
     }

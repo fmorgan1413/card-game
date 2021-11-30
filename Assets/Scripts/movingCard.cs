@@ -22,7 +22,11 @@ public class movingCard : MonoBehaviour
     private GameObject trashzone;
 
     public DealCards dealcards;
+    //public GameManager GM;
 
+    public slotReader HoverOver;
+    public Cards cards;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -41,94 +45,103 @@ public class movingCard : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "playerCardZone1")
+        slotReader sl = collision.gameObject.GetComponent<slotReader>();
+        if (sl != null)
         {
-            isOverPlayerCardZone1 = true;
-            playerzone1 = collision.gameObject;
-            
+            HoverOver = sl;
         }
-        else if (collision.gameObject.name == "playerCardZone2")
-        {
-            isOverPlayerCardZone2 = true;
-            playerzone2 = collision.gameObject;
+
+        //if (collision.gameObject.name == "playerCardZone1")
+        //{
+        //    isOverPlayerCardZone1 = true;
+        //    playerzone1 = collision.gameObject;
             
-        }
-        else if (collision.gameObject.name == "playerCardZone3")
-        {
-            isOverPlayerCardZone3 = true;
-            playerzone3 = collision.gameObject;
+        //}
+        //else if (collision.gameObject.name == "playerCardZone2")
+        //{
+        //    isOverPlayerCardZone2 = true;
+        //    playerzone2 = collision.gameObject;
             
-        }
-        else if (collision.gameObject.name == "enemyCardZone1")
-        {
-            isOverEnemyCardZone1 = true;
-            enemyzone1 = collision.gameObject;
+        //}
+        //else if (collision.gameObject.name == "playerCardZone3")
+        //{
+        //    isOverPlayerCardZone3 = true;
+        //    playerzone3 = collision.gameObject;
+            
+        //}
+        //else if (collision.gameObject.name == "enemyCardZone1")
+        //{
+        //    isOverEnemyCardZone1 = true;
+        //    enemyzone1 = collision.gameObject;
            
-        }
-        else if (collision.gameObject.name == "enemyCardZone2")
-        {
-            isOverEnemyCardZone2 = true;
-            enemyzone2 = collision.gameObject;
+        //}
+        //else if (collision.gameObject.name == "enemyCardZone2")
+        //{
+        //    isOverEnemyCardZone2 = true;
+        //    enemyzone2 = collision.gameObject;
             
-        }
-        else if (collision.gameObject.name == "enemyCardZone3")
-        {
-            isOverEnemyCardZone3 = true;
-            enemyzone3 = collision.gameObject;
+        //}
+        //else if (collision.gameObject.name == "enemyCardZone3")
+        //{
+        //    isOverEnemyCardZone3 = true;
+        //    enemyzone3 = collision.gameObject;
             
-        }
-        else if (collision.gameObject.name == "trashZone")
-        {
-            isOverTrashZone = true;
-            trashzone = collision.gameObject;
-        }
+        //}
+        //else if (collision.gameObject.name == "trashZone")
+        //{
+        //    isOverTrashZone = true;
+        //    trashzone = collision.gameObject;
+        //}
 
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "playerCardZone1")
-        {
-            isOverPlayerCardZone1 = false;
-            playerzone1 = null;
-            
-        }
-        else if (collision.gameObject.name == "playerCardZone2")
-        {
-            isOverPlayerCardZone2 = false;
-            playerzone2 = null;
-            
-        }
-        else if (collision.gameObject.name == "playerCardZone3")
-        {
-            isOverPlayerCardZone3 = false;
-            playerzone3 = null;
-            
-        }
-        else if (collision.gameObject.name == "enemyCardZone1")
-        {
-            isOverEnemyCardZone1 = false;
-            enemyzone1 = null;
-            
-        }
-        else if (collision.gameObject.name == "enemyCardZone2")
-        {
-            isOverEnemyCardZone2 = false;
-            enemyzone2 = null;
-            
-        }
-        else if (collision.gameObject.name == "enemyCardZone3")
-        {
-            isOverEnemyCardZone3 = false;
-            enemyzone3 = null;
-            
-        }
-        else if (collision.gameObject.name == "trashZone")
-        {
-            isOverTrashZone = false;
-            trashzone = null;
+        if (collision.gameObject == HoverOver.gameObject)
+            HoverOver = null;
 
-        }
+        //if (collision.gameObject.name == "playerCardZone1")
+        //{
+        //    isOverPlayerCardZone1 = false;
+        //    playerzone1 = null;
+            
+        //}
+        //else if (collision.gameObject.name == "playerCardZone2")
+        //{
+        //    isOverPlayerCardZone2 = false;
+        //    playerzone2 = null;
+            
+        //}
+        //else if (collision.gameObject.name == "playerCardZone3")
+        //{
+        //    isOverPlayerCardZone3 = false;
+        //    playerzone3 = null;
+            
+        //}
+        //else if (collision.gameObject.name == "enemyCardZone1")
+        //{
+        //    isOverEnemyCardZone1 = false;
+        //    enemyzone1 = null;
+            
+        //}
+        //else if (collision.gameObject.name == "enemyCardZone2")
+        //{
+        //    isOverEnemyCardZone2 = false;
+        //    enemyzone2 = null;
+            
+        //}
+        //else if (collision.gameObject.name == "enemyCardZone3")
+        //{
+        //    isOverEnemyCardZone3 = false;
+        //    enemyzone3 = null;
+            
+        //}
+        //else if (collision.gameObject.name == "trashZone")
+        //{
+        //    isOverTrashZone = false;
+        //    trashzone = null;
+
+        //}
     }
 
     public void StartDragging() 
@@ -141,48 +154,77 @@ public class movingCard : MonoBehaviour
     {
         beingDragged = false;
 
-        if (isOverPlayerCardZone1)
+        if (HoverOver != null)
         {
-            transform.SetParent(playerzone1.transform, false);
-            transform.position = playerzone1.transform.position;
-        }
-        else if (isOverPlayerCardZone2)
-        {
-            transform.SetParent(playerzone2.transform, false);
-            transform.position = playerzone2.transform.position;
-        }
-        else if (isOverPlayerCardZone3)
-        {
-            transform.SetParent(playerzone3.transform, false);
-            transform.position = playerzone3.transform.position;
-        }
-        else if (isOverEnemyCardZone1)
-        {
-            transform.SetParent(enemyzone1.transform, false);
-            transform.position = enemyzone1.transform.position;
-        }
-        else if (isOverEnemyCardZone2)
-        {
-            transform.SetParent(enemyzone2.transform, false);
-            transform.position = enemyzone2.transform.position;
-        }
-        else if (isOverEnemyCardZone3)
-        {
-            transform.SetParent(enemyzone3.transform, false);
-            transform.position = enemyzone3.transform.position;
-        }
+            transform.SetParent(HoverOver.transform, false);
+            transform.localPosition = Vector3.zero;
+            if(HoverOver.playerSlot)
+               GameManager.GM.playerCards[HoverOver.CardSlot] = this;
 
-        else if (isOverTrashZone)
-        {
-            transform.SetParent(trashzone.transform, false);
-            transform.position = trashzone.transform.position;
-
-            //trash card lol
-            Destroy(trashzone.transform.GetChild(0).gameObject);
+            else
+                GameManager.GM.enemyCards[HoverOver.CardSlot] = this;
         }
         else
         {
             transform.position = startPosition;
         }
+
+        //if (isOverPlayerCardZone1)
+        //{
+        //    transform.SetParent(playerzone1.transform, false);
+        //    transform.position = playerzone1.transform.position;
+        //    GM.playerCards[0] = playerzone1.transform.GetChild(0).GetComponent<movingCard>();
+        //}
+        //else if (isOverPlayerCardZone2)
+        //{
+        //    transform.SetParent(playerzone2.transform, false);
+        //    transform.position = playerzone2.transform.position;
+        //    GM.playerCards[1] = this;
+        //}
+        //else if (isOverPlayerCardZone3)
+        //{
+        //    transform.SetParent(playerzone3.transform, false);
+        //    transform.position = playerzone3.transform.position;
+        //    GM.playerCards[2] = playerzone3.transform.GetChild(0).GetComponent<movingCard>();
+        //}
+        //else if (isOverEnemyCardZone1)
+        //{
+        //    transform.SetParent(enemyzone1.transform, false);
+        //    transform.position = enemyzone1.transform.position;
+        //    GM.enemyCards[0] = enemyzone1.transform.GetChild(0).GetComponent<movingCard>();
+        //}
+        //else if (isOverEnemyCardZone2)
+        //{
+        //    transform.SetParent(enemyzone2.transform, false);
+        //    transform.position = enemyzone2.transform.position;
+        //    GM.enemyCards[1] = enemyzone2.transform.GetChild(0).GetComponent<movingCard>();
+        //}
+        //else if (isOverEnemyCardZone3)
+        //{
+        //    transform.SetParent(enemyzone3.transform, false);
+        //    transform.position = enemyzone3.transform.position;
+        //    GM.enemyCards[2] = enemyzone3.transform.GetChild(0).GetComponent<movingCard>();
+        //}
+
+        //else if (isOverTrashZone)
+        //{
+        //    transform.SetParent(trashzone.transform, false);
+        //    transform.position = trashzone.transform.position;
+
+        //    //trash card lol
+        //    Destroy(trashzone.transform.GetChild(0).gameObject);
+        //}
+        //else
+        //{
+        //    transform.position = startPosition;
+        //}
     }
+}
+
+public enum Cards
+{
+    attack,
+    charge,
+    defense,
+    superAttack
 }

@@ -14,6 +14,7 @@ public class DealCards : MonoBehaviour
     public GameObject playerCards;
     public GameObject enemyCards;
 
+
     List<GameObject> cards = new List<GameObject>();
 
 
@@ -24,6 +25,15 @@ public class DealCards : MonoBehaviour
         cards.Add(defenseCard);
         cards.Add(chargeCard);
         cards.Add(superAttack);
+
+        for (var i = 0; i < 5; i++) 
+        {
+            playerCards = Instantiate(cards[Random.Range(0, cards.Count)], new Vector3(0, 0, 0), Quaternion.identity);
+            playerCards.transform.SetParent(playerArea.transform, false);
+
+            enemyCards = Instantiate(cards[Random.Range(0, cards.Count)], new Vector3(0, 0, 0), Quaternion.identity);
+            enemyCards.transform.SetParent(enemyArea.transform, false);
+        }
     }
 
     // Update is called once per frame
@@ -34,20 +44,21 @@ public class DealCards : MonoBehaviour
 
     public void OnClick() 
     {
-        for(var i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             if (playerArea.transform.childCount < 5)
             {
                 playerCards = Instantiate(cards[Random.Range(0, cards.Count)], new Vector3(0, 0, 0), Quaternion.identity);
                 playerCards.transform.SetParent(playerArea.transform, false);
             }
-
             if (enemyArea.transform.childCount < 5)
             {
                 enemyCards = Instantiate(cards[Random.Range(0, cards.Count)], new Vector3(0, 0, 0), Quaternion.identity);
                 enemyCards.transform.SetParent(enemyArea.transform, false);
             }
         }
+
+        GameManager.GM.EndTurn();
     }
 
 }

@@ -102,8 +102,9 @@ MonoBehaviour:
     type: 3}
   enemyzone3: {fileID: 3781347110470092113, guid: 892698110fc801f4ca277193c51e6981,
     type: 3}
-  trashzone: {fileID: 441452950907963667, guid: de2d7aa3ab111fb43a1c32b4efeccbba,
-    type: 3}
+  dealcards: {fileID: 0}
+  HoverOver: {fileID: 0}
+  cards: 3
 --- !u!114 &2843726734961190488
 MonoBehaviour:
   m_ObjectHideFlags: 0
