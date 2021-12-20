@@ -20,6 +20,13 @@ public class movingCard : MonoBehaviour
 
     public EnemyControl enemy;
 
+    public AudioSource sound;
+
+    public void Start()
+    {
+        sound = this.GetComponent<AudioSource>();
+    }
+
     void Update()
     {
         if (beingDragged) 
@@ -48,6 +55,8 @@ public class movingCard : MonoBehaviour
     {
         startPosition = transform.position;
         beingDragged = true;
+
+        sound.Play();
     }
 
     public void StopDragging() 
