@@ -12,8 +12,6 @@ public class movingCard : MonoBehaviour
     public GameObject enemyzone1;
     public GameObject enemyzone2;
     public GameObject enemyzone3;
-    private bool isOverTrashZone = false;
-    private GameObject trashzone;
 
     public DealCards dealcards;
 
@@ -21,14 +19,7 @@ public class movingCard : MonoBehaviour
     public Cards cards;
 
     public EnemyControl enemy;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
         if (beingDragged) 

@@ -7,18 +7,9 @@ public class cardReader : MonoBehaviour
     public GameObject board;
     private GameObject zoom;
 
-
-    // Start is called before the first frame update
-    void Awake()
+    public void Awake()
     {
         board = GameObject.Find("Canvas");
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void Hovering() 

@@ -6,5 +6,4 @@ public class slotReader : MonoBehaviour
 {
     public int CardSlot;
     public bool playerSlot;
-    //public int enemyCardSlot;
 }

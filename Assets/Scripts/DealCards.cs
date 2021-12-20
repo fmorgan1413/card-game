@@ -20,8 +20,6 @@ public class DealCards : MonoBehaviour
 
     List<GameObject> cards = new List<GameObject>();
 
-
-    // Start is called before the first frame update
     void Start()
     {
         cards.Add(attackCard);
@@ -38,12 +36,6 @@ public class DealCards : MonoBehaviour
             enemyCards.transform.SetParent(enemyArea.transform, false);
             enemyControl.enemyHand.Add(enemyCards.GetComponent<movingCard>());
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void OnClick() 

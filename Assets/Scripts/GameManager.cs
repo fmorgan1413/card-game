@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         GM = this;
         isPlayerturn = true;
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         Debug.Log("isPlayerturn: " + isPlayerturn);
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator Resolve() 
     {
         checkZone(playerCards[2], enemyCards[2]);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.25f);
 
         Destroy(playerzone.transform.GetChild(0).gameObject); ;
         Destroy(enemyzone.transform.GetChild(0).gameObject);

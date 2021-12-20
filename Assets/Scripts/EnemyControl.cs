@@ -12,17 +12,6 @@ public class EnemyControl : MonoBehaviour
 
     public List<movingCard> enemyHand = new List<movingCard>();
     public Dictionary<movingCard, float> Dict = new Dictionary<movingCard, float>();
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void AI() 
     {
