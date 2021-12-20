@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,8 +20,8 @@ public class GameManager : MonoBehaviour
     public DealCards dealCards;
     public movingCard movingCards;
 
-    public movingCard[] playerCards = new movingCard[3];
-    public movingCard[] enemyCards = new movingCard[3];
+    public movingCard[] playerCards = new movingCard[4];
+    public movingCard[] enemyCards = new movingCard[4];
 
     public bool isPlayerturn;
 
@@ -28,7 +29,15 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI enemyEnergyUI;
     public TextMeshProUGUI playerHealthUI;
     public TextMeshProUGUI playerEnergyUI;
+    public TextMeshProUGUI playerRead;
+    public TextMeshProUGUI enemyRead;
+    public TextMeshProUGUI enemyEnergyRead;
+    public TextMeshProUGUI enemyHealthRead;
+    public TextMeshProUGUI playerEnergyRead;
+    public TextMeshProUGUI playerHealthRead;
 
+    public GameObject enemyzone;
+    public GameObject playerzone;
 
     private void Awake()
     {
@@ -43,80 +52,122 @@ public class GameManager : MonoBehaviour
 
     public void EndTurn() 
     {
-        if (isPlayerturn == true)
-        {
-            isPlayerturn = false;
-            Debug.Log("isplayerturn: " + isPlayerturn);
-        }
-
-        if (isPlayerturn == false)
-        {
             enemy.AI();
-            //StartCoroutine(Resolve());
-            checkZone2();
-            isPlayerturn = true;
-            Debug.Log("isPlayerturn: " + GM.isPlayerturn);
+            StartCoroutine(Resolve());
+    }
+
+    public void Update()
+    {
+        if (enemyHealth == 0 || playerHealth == 0) 
+        {
+            SceneManager.LoadScene("End");
         }
-        Debug.Log("CARDS: " + playerCards[2].cards + " / " + enemyCards[2].cards);
     }
 
     public IEnumerator Resolve() 
     {
-        //resolve cards, health, and energy in here
+        checkZone(playerCards[2], enemyCards[2]);
+        yield return new WaitForSeconds(1.5f);
+
+        Destroy(playerzone.transform.GetChild(0).gameObject); ;
+        Destroy(enemyzone.transform.GetChild(0).gameObject);
+
+        playerRead.text = "";
+        enemyRead.text = "";
+
+        playerEnergyRead.text = "";
+        enemyEnergyRead.text = "";
+
+        playerHealthRead.text = "";
+        enemyHealthRead.text = "";
 
         yield return null;
     }
 
-    public void checkZone1() 
+    public void checkZone(movingCard pcard, movingCard ecard)
     {
-        
-    }
-
-    public void checkZone2()
-    {
-        movingCard pcard = playerCards[2];
-        movingCard ecard = enemyCards[2];
         if (pcard.cards == Cards.attack) 
         {
-            playerEnergy--;
-
-            if (ecard.cards == Cards.attack)
+            if (playerEnergy < 1)
             {
-                enemyEnergy--;
-
-                playerHealth--;
-                enemyHealth--;
+                Debug.Log("you wasted a card");
             }
-            else if (ecard.cards == Cards.defense) 
+            else
             {
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
-            }
-            else if (ecard.cards == Cards.charge)
-            {
-                enemyEnergy++;
-                enemyHealth--;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
-            }
-            else if (ecard.cards == Cards.superAttack)
-            {
-                enemyEnergy -= 3;
-                enemyHealth--;
+                playerEnergy--;
+                playerEnergyRead.text = "-1";
 
-                playerHealth -= 2;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                if (ecard.cards == Cards.attack)
+                {
+                    if (enemyEnergy < 1)
+                    {
+                        Debug.Log("wasted card");
+                    }
+                    else
+                    {
+                        enemyEnergy--;
+                        enemyEnergyRead.text = "-1";
+                    }
+                }
+                else if (ecard.cards == Cards.defense)
+                {
+                    Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                }
+                else if (ecard.cards == Cards.charge)
+                {
+                    enemyEnergy++;
+                    enemyHealth--;
+
+                    enemyEnergyRead.text = "+1";
+                    enemyHealthRead.text = "-1";
+                    Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                }
+                else if (ecard.cards == Cards.superAttack)
+                {
+                    if (enemyEnergy < 3)
+                    {
+                        Debug.Log("wasted card");
+                    }
+                    else
+                    {
+                        enemyEnergy -= 3;
+                        enemyHealth--;
+
+                        enemyEnergyRead.text = "-3";
+                        enemyHealthRead.text = "-1";
+
+                        playerHealth -= 2;
+
+                        playerHealthRead.text = "-2";
+                        Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                    }
+                }
             }
         }
         if (pcard.cards == Cards.charge)
         {
             playerEnergy++;
+            playerEnergyRead.text = "+1";
 
             if (ecard.cards == Cards.attack)
             {
-                enemyEnergy--;
+                if (enemyEnergy < 1)
+                {
+                    Debug.Log("wasted card");
+                }
+                else
+                {
+                    enemyEnergy--;
 
-                playerHealth--;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                    enemyEnergyRead.text = "-1";
+
+                    playerHealth--;
+
+                    playerHealthRead.text = "-1";
+                    Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                }
             }
+
             else if (ecard.cards == Cards.defense)
             {
                 Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
@@ -124,22 +175,44 @@ public class GameManager : MonoBehaviour
             else if (ecard.cards == Cards.charge)
             {
                 enemyEnergy++;
+
+                enemyEnergyRead.text = "+1";
                 Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
             }
             else if (ecard.cards == Cards.superAttack)
             {
-                enemyEnergy -= 3;
+                if (enemyEnergy < 3)
+                {
+                    Debug.Log("wasted card");
+                }
+                else
+                {
+                    enemyEnergy -= 3;
 
-                playerHealth -= 2;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                    enemyEnergyRead.text = "-3";
+
+                    playerHealth -= 2;
+
+                    playerHealthRead.text = "-2";
+                    Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                }
             }
         }
         if (pcard.cards == Cards.defense)
         {
             if (ecard.cards == Cards.attack)
             {
-                enemyEnergy--;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                if (enemyEnergy < 1)
+                {
+                    Debug.Log("wasted card");
+                }
+                else
+                {
+                    enemyEnergy--;
+
+                    enemyEnergyRead.text = "-1";
+                    Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                }
             }
             else if (ecard.cards == Cards.defense)
             {
@@ -148,56 +221,109 @@ public class GameManager : MonoBehaviour
             else if (ecard.cards == Cards.charge)
             {
                 enemyEnergy++;
+
+                enemyEnergyRead.text = "+1";
                 Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
             }
             else if (ecard.cards == Cards.superAttack)
             {
-                enemyEnergy -= 3;
+                if (enemyEnergy < 3)
+                {
+                    Debug.Log("waste card");
+                }
+                else
+                {
+                    enemyEnergy -= 3;
 
-                playerHealth --;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                    enemyEnergyRead.text = "-3";
+
+                    playerHealth--;
+
+                    playerHealthRead.text = "-1";
+                    Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                }
             }
         }
         if (pcard.cards == Cards.superAttack)
         {
-            playerEnergy -= 3;
-            if (ecard.cards == Cards.attack)
+            if (playerEnergy < 3)
             {
-                enemyEnergy--;
+                Debug.Log("wasted card");
+            }
+            else
+            {
+                playerEnergy -= 3;
 
-                playerHealth--;
-                enemyHealth -= 2;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
-            }
-            else if (ecard.cards == Cards.defense)
-            {
-                enemyHealth--;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
-            }
-            else if (ecard.cards == Cards.charge)
-            {
-                enemyEnergy++;
-                enemyHealth -= 2;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
-            }
-            else if (ecard.cards == Cards.superAttack)
-            {
-                enemyEnergy -= 3;
-                enemyHealth -= 2;
+                playerEnergyRead.text = "-3";
+                if (ecard.cards == Cards.attack)
+                {
+                    if (enemyEnergy < 1)
+                    {
+                        Debug.Log("wasted card");
+                    }
+                    else
+                    {
+                        enemyEnergy--;
 
-                playerHealth -= 2;
-                Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                        enemyEnergyRead.text = "-1";
+
+                        playerHealth--;
+                        enemyHealth -= 2;
+
+                        playerHealthRead.text = "-1";
+                        enemyHealthRead.text = "-2";
+                        Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                    }
+                }
+                else if (ecard.cards == Cards.defense)
+                {
+                    enemyHealth--;
+
+                    enemyHealthRead.text = "-1";
+                    Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                }
+                else if (ecard.cards == Cards.charge)
+                {
+                    enemyEnergy++;
+                    enemyHealth -= 2;
+
+                    enemyEnergyRead.text = "+1";
+                    enemyHealthRead.text = "-2";
+                    Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                }
+                else if (ecard.cards == Cards.superAttack)
+                {
+                    if (enemyEnergy < 3)
+                    {
+                        Debug.Log("wasted card");
+                    }
+                    else
+                    {
+                        enemyEnergy -= 3;
+
+                        enemyEnergyRead.text = "-3";
+                        Debug.Log("player energy/health: " + playerEnergy + "/ " + playerHealth + " enemy energy/health: " + enemyEnergy + "/ " + enemyHealth);
+                    }
+                }
             }
+        }
+
+        if (playerEnergy < 0) 
+        {
+            playerEnergy = 0;
+        }
+
+        if (enemyEnergy < 0)
+        {
+            enemyEnergy = 0;
         }
 
         enemyHealthUI.text = "Health: " + enemyHealth;
         enemyEnergyUI.text = "Energy: " + enemyEnergy;
         playerHealthUI.text = "Health: " + playerHealth;
         playerEnergyUI.text = "Energy: " + playerEnergy;
-    }
 
-    public void checkZone3()
-    {
-
+        playerRead.text = pcard.cards.ToString() + " played!";
+        enemyRead.text = ecard.cards.ToString() + " played!";
     }
 }

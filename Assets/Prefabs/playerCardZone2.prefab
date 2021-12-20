@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.990566, g: 0.014017418, b: 0.014017418, a: 1}
+  m_Color: {r: 0.4245283, g: 0.062077247, b: 0.062077247, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -114,5 +114,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 567ef5b9e91a9554e823cfb0f4354818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCardSlot: 0
-  enemyCardSlot: 0
+  CardSlot: 0
+  playerSlot: 0

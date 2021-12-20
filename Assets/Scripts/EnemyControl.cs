@@ -5,6 +5,13 @@ using UnityEngine;
 public class EnemyControl : MonoBehaviour
 {
     public DealCards cards;
+    public movingCard moveCard;
+
+    public GameObject enemyZone2;
+    public slotReader slotReader;
+
+    public List<movingCard> enemyHand = new List<movingCard>();
+    public Dictionary<movingCard, float> Dict = new Dictionary<movingCard, float>();
     // Start is called before the first frame update
     void Start()
     {
@@ -19,25 +26,29 @@ public class EnemyControl : MonoBehaviour
 
     public void AI() 
     {
-        if (GameManager.GM.enemyHealth < 5)
+        Dict.Clear();
+        foreach (movingCard c in enemyHand)
         {
-            DefensiveMode();
-            cards.OnClick();
+            Dict.Add(c, c.cardVal());
         }
-        else if (GameManager.GM.enemyHealth < 10 & GameManager.GM.enemyHealth >= 5)
+        Debug.Log("eh: " + enemyHand.Count);
+        float best = 0;
+        movingCard chosen = null;
+        foreach (movingCard c in Dict.Keys)
         {
-            SafeMode();
-            cards.OnClick();
+            if (c == null) continue;
+            Debug.Log(c + " / " + Dict[c]);
+            if (Dict[c] > best)
+            {
+                best = Dict[c];
+                chosen = c;
+            }
         }
-    }
+        Debug.Log("chose: " + chosen + " / " + enemyZone2);
+        chosen.transform.SetParent(enemyZone2.transform, false);
+        chosen.transform.localPosition = Vector3.zero;
+        GameManager.GM.enemyCards[2] = chosen.GetComponent<movingCard>();
 
-    public void DefensiveMode() 
-    {
-
-    }
-
-    public void SafeMode()
-    {
-
+        cards.Refresh();
     }
 }

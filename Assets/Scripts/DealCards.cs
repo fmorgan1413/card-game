@@ -14,6 +14,9 @@ public class DealCards : MonoBehaviour
     public GameObject playerCards;
     public GameObject enemyCards;
 
+    public Cards Cards;
+    public movingCard movingCard;
+    public EnemyControl enemyControl;
 
     List<GameObject> cards = new List<GameObject>();
 
@@ -33,6 +36,7 @@ public class DealCards : MonoBehaviour
 
             enemyCards = Instantiate(cards[Random.Range(0, cards.Count)], new Vector3(0, 0, 0), Quaternion.identity);
             enemyCards.transform.SetParent(enemyArea.transform, false);
+            enemyControl.enemyHand.Add(enemyCards.GetComponent<movingCard>());
         }
     }
 
@@ -44,6 +48,13 @@ public class DealCards : MonoBehaviour
 
     public void OnClick() 
     {
+        Refresh();
+        GameManager.GM.EndTurn();
+    }
+
+    public void Refresh()
+    {
+
         for (var i = 0; i < 5; i++)
         {
             if (playerArea.transform.childCount < 5)
@@ -55,10 +66,11 @@ public class DealCards : MonoBehaviour
             {
                 enemyCards = Instantiate(cards[Random.Range(0, cards.Count)], new Vector3(0, 0, 0), Quaternion.identity);
                 enemyCards.transform.SetParent(enemyArea.transform, false);
+
+                enemyControl.enemyHand.Add(enemyCards.GetComponent<movingCard>());
             }
         }
-
-        GameManager.GM.EndTurn();
     }
+
 
 }
