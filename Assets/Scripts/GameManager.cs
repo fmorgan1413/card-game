@@ -54,15 +54,13 @@ public class GameManager : MonoBehaviour
     {
             enemy.AI();
             StartCoroutine(Resolve());
-    }
 
-    public void Update()
-    {
-        if (enemyHealth == 0 || playerHealth == 0) 
+        if (enemyHealth == 0 || playerHealth == 0)
         {
             SceneManager.LoadScene("End");
         }
     }
+
 
     public IEnumerator Resolve() 
     {
