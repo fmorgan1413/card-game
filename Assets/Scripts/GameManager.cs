@@ -70,6 +70,8 @@ public class GameManager : MonoBehaviour
         Destroy(playerzone.transform.GetChild(0).gameObject); ;
         Destroy(enemyzone.transform.GetChild(0).gameObject);
 
+        enemy.trashRead.text = "";
+
         playerRead.text = "";
         enemyRead.text = "";
 

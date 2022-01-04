@@ -80,7 +80,7 @@ public class movingCard : MonoBehaviour
             }
             else
             {
-                GameManager.GM.enemyCards[HoverOver.CardSlot] = this;
+                 GameManager.GM.enemyCards[HoverOver.CardSlot] = this;
             }
 
             
@@ -136,9 +136,13 @@ public class movingCard : MonoBehaviour
             }
             case Cards.superAttack:
             {
-                    if (GameManager.GM.enemyEnergy > 9 && GameManager.GM.playerHealth > 5)
+                    if (GameManager.GM.enemyEnergy > 9)
                     {
-                        v ++;
+                        v += 2;
+                    }
+                    else if(GameManager.GM.enemyEnergy >= 5 && GameManager.GM.playerHealth >= 5) 
+                    {
+                        v++;
                     }
 
                     break;
